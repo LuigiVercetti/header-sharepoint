@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Header Embebible</title>
+  <style>
+    /* Reset básico y tipografía */
+    html, body { margin:0; padding:0; }
+    body { font-family: "Segoe UI", Roboto, Arial, sans-serif; }
+
+    /* Contenedor del header */
+    .custom-header {
+      width: 100%;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 12px 40px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    /* Zona izquierda: logo + navegación */
+    .left {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      min-width: 0; /* para truncar correctamente en pantallas pequeñas */
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo img { height: 52px; width: auto; display: block; }
+
+    nav.nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    nav.nav a {
+      color: #0B2A5A;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      line-height: 1;
+      position: relative;
+      padding: 6px 0;
+      white-space: nowrap;
+    }
+
+    /* Indicador activo y hover */
+    nav.nav a.active::after,
+    nav.nav a:hover::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: -6px;
+      height: 3px; background: #0B2A5A; border-radius: 2px;
+    }
+
+    /* Zona derecha: iconos (idioma, búsqueda, otros) */
+    .right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background .15s ease;
+    }
+
+    .icon-btn:hover { background: #f2f6fb; }
+
+    .icon-btn img { width: 20px; height: 20px; display: block; }
+
+    /* Buscador simple opcional */
+    .search {
+      position: relative;
+      display: none; /* visible sólo si se activa */
+    }
+    .search input {
+      height: 34px; padding: 0 34px 0 12px; border-radius: 18px;
+      border: 1px solid #c8d1e0; outline: none;
+      font-size: 14px; color: #111;
+    }
+    .search .sicon { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; opacity:.7; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .custom-header { padding: 10px 20px; }
+      nav.nav { gap: 20px; }
+    }
+    @media (max-width: 840px) {
+      /* En móviles ocultamos la navegación larga por simplicidad */
+      nav.nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <!--
+    =============================
+    Header embebible para SharePoint
+    =============================
+    Cómo usarlo:
+      1) Suba este archivo (header.html) a una biblioteca accesible (p.ej., Site Assets).
+      2) Copie la URL y embeberla en un Web Part "Insertar" (iframe) en su página.
+
+    Personalización rápida:
+      - Cambie LOGO_URL, HOME_URL y los enlaces del menú.
+      - Reemplace ICONO_ES_URL e ICONO_SEARCH_URL por sus propios recursos.
+      - Para marcar un menú como activo, agregue la clase "active" al enlace correspondiente.
+  -->
+  <header class="custom-header" role="banner">
+    <div class="left">
+      <!-- LOGO (reemplazar LOGO_URL y HOME_URL) -->
+      <a class="logo" href="HOME_URL" aria-label="Inicio">
+        <img src="LOGO_URL" alt="Logo" />
+      </a>
+
+      <!-- MENÚ principal (ajuste los href a sus páginas reales) -->
+      <nav class="nav" role="navigation" aria-label="Navegación principal">
+        <a href="#" class="active">Home</a>
+        <a href="#">Trayectoria</a>
+        <a href="#">Soluciones y productos</a>
+        <a href="#">Actualidad</a>
+        <a href="#">Ética y compliance</a>
+        <a href="#">Trabaje con nosotros</a>
+        <a href="#">Contáctenos</a>
+      </nav>
+    </div>
+
+    <div class="right">
+      <!-- Ícono idioma (reemplazar ICONO_ES_URL y el href si tiene selector de idioma) -->
+      <a class="icon-btn" href="#" aria-label="Cambiar idioma">
+        <img src="ICONO_ES_URL" alt="ES" />
+      </a>
+
+      <!-- Ícono búsqueda (reemplazar ICONO_SEARCH_URL o mostrar caja) -->
+      <a class="icon-btn" href="#" aria-label="Buscar">
+        <img src="ICONO_SEARCH_URL" alt="Buscar" />
+      </a>
+
+      <!-- Buscador opcional: quite display:none arriba para mostrarlo -->
+      <div class="search" role="search" aria-label="Buscar en el sitio">
+        <input type="search" placeholder="Buscar…" />
+        <img class="sicon" src="ICONO_SEARCH_URL" alt="Buscar" />
+      </div>
+    </div>
+  </header>
+</body>
+</html>
