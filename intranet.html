@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Intranet corporativa</title>
+  <meta name="description" content="Intranet corporativa - Portal interno" />
+
+  <style>
+    /* ============ Diseño base y variables de marca ============ */
+    :root{
+      --brand:#0B2A5A;         /* Color principal */
+      --brand-2:#1455A3;       /* Secundario */
+      --accent:#11A876;        /* Acento (botones/kpi positivos) */
+      --text:#1b1f23;          /* Texto principal */
+      --muted:#6a737d;         /* Texto secundario */
+      --bg:#ffffff;            /* Fondo */
+      --bg-soft:#f5f7fb;       /* Fondo suave bloques */
+      --card:#ffffff;          /* Fondo tarjetas */
+      --line:#e5e7eb;          /* Líneas divisorias */
+      --radius:14px;           /* Bordes redondeados */
+      --radius-sm:10px;
+      --shadow:0 6px 18px rgba(10,22,70,.08);
+      --shadow-sm:0 4px 12px rgba(10,22,70,.06);
+      --space:clamp(12px,2vw,24px);
+      --wrap:clamp(980px, 92vw, 1280px);
+    }
+
+    /* Reset suave y tipografía de sistema (sin externas) */
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,"Noto Sans",sans-serif}
+    img{max-width:100%;display:block}
+
+    a{color:var(--brand);text-decoration:none}
+    a:hover{opacity:.9}
+
+    /* Utilidades */
+    .container{max-width:var(--wrap);margin-inline:auto;padding-inline:var(--space)}
+    .grid{display:grid;gap:var(--space)}
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    .grid-4{grid-template-columns:repeat(4,1fr)}
+    @media (max-width: 980px){.grid-4{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width: 740px){.grid-3,.grid-2,.grid-4{grid-template-columns:1fr}}
+
+    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
+
+    .btn{display:inline-flex;align-items:center;gap:.6rem;background:var(--brand);color:#fff;padding:.8rem 1rem;border-radius:10px;font-weight:600}
+    .btn--light{background:var(--bg);color:var(--brand);border:1px solid var(--line)}
+    .chip{display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .6rem;border-radius:9999px;background:var(--bg-soft);color:var(--brand);font-size:.85rem;font-weight:600;border:1px solid var(--line)}
+
+    /* ============ Header ============ */
+    header.site-header{
+      position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line)
+    }
+    .nav-wrap{display:flex;align-items:center;justify-content:space-between;gap:var(--space);height:68px}
+    .brand{display:flex;align-items:center;gap:.9rem}
+    .brand__logo{
+      width:auto;height:40px;object-fit:contain;
+      /* Reemplaza el src del <img> en el HTML más abajo si tienes logo */
+    }
+    .brand__title{font-size:1.15rem;font-weight:800;color:var(--brand);letter-spacing:.3px}
+
+    .nav{display:flex;align-items:center;gap:1.2rem}
+    .nav a{color:var(--text);font-weight:600}
+    .nav a.is-active{color:var(--brand);border-bottom:3px solid var(--brand);padding-bottom:.5rem}
+
+    .nav-actions{display:flex;align-items:center;gap:.6rem}
+    .icon-btn{
+      width:38px;height:38px;border-radius:10px;border:1px solid var(--line);
+      display:inline-flex;align-items:center;justify-content:center;background:var(--bg)
+    }
+    .icon{width:18px;height:18px;display:block;fill:currentColor;color:var(--text)}
+    .menu-toggle{display:none}
+
+    @media (max-width:980px){
+      .nav{display:none}
+      .menu-toggle{display:inline-flex}
+      .drawer{display:none;position:fixed;inset:68px 0 auto 0;background:#fff;border-top:1px solid var(--line);padding:1rem 0;box-shadow:var(--shadow)}
+      .drawer.open{display:block}
+      .drawer a{display:block;padding:.9rem 1.2rem;border-bottom:1px solid var(--line);color:var(--text);font-weight:600}
+    }
+
+    /* ============ Hero / Banner principal ============ */
+    .hero{
+      background:linear-gradient(180deg, rgba(11,42,90,.08), rgba(11,42,90,.02));
+      border-bottom:1px solid var(--line);
+    }
+    .hero__wrap{display:grid;gap:var(--space);grid-template-columns: 1.4fr 1fr;align-items:center;padding:clamp(18px,4vw,40px) 0}
+    @media (max-width:980px){.hero__wrap{grid-template-columns:1fr}}
+    .hero__title{font-size:clamp(1.6rem,2.8vw,2.4rem);line-height:1.15;margin:.2rem 0;color:var(--brand)}
+    .hero__text{color:var(--muted);font-size:1.05rem}
+    .hero__img{
+      aspect-ratio: 16/9;border-radius:var(--radius);border:1px solid var(--line);
+      background:#fff center/cover no-repeat url('HERO_IMG_URL');
+      /* Reemplaza HERO_IMG_URL por una imagen si quieres */
+      box-shadow:var(--shadow)
+    }
+
+    /* ============ Accesos rápidos ============ */
+    .quick-links .card{padding:1rem}
+    .ql-item{display:flex;align-items:flex-start;gap:.9rem}
+    .ql-icon{
+      width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+      background:var(--bg-soft);border:1px solid var(--line);color:var(--brand)
+    }
+    .ql-title{font-weight:700}
+    .section-title{font-size:1.25rem;margin:1.2rem 0 .6rem 0;color:var(--brand)}
+
+    /* ============ Noticias ============ */
+    .news .card{overflow:hidden}
+    .news .thumb{aspect-ratio: 16/9;background:#e9eef6 center/cover no-repeat;border-bottom:1px solid var(--line)}
+    .news .body{padding:1rem}
+    .news .meta{display:flex;align-items:center;gap:.6rem;color:var(--muted);font-size:.9rem;margin:.2rem 0 .6rem 0}
+
+    /* ============ Áreas / Departamentos ============ */
+    .depts .dept{display:flex;align-items:center;gap:.9rem;padding:1rem}
+    .badge{
+      width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+      background:#fff;border:1px solid var(--line);color:var(--brand);box-shadow:var(--shadow-sm)
+    }
+
+    /* ============ KPIs ============ */
+    .kpis .kpi{
+      padding:1rem;border-radius:var(--radius);border:1px solid var(--line);background:var(--bg-soft);
+      display:flex;flex-direction:column;gap:.2rem;align-items:flex-start
+    }
+    .kpis .val{font-size:1.8rem;font-weight:800;color:var(--brand)}
+    .kpis .delta{font-weight:700;color:var(--accent)}
+
+    /* ============ Eventos ============ */
+    .events .row{display:flex;align-items:stretch;gap:var(--space)}
+    @media (max-width:980px){.events .row{flex-direction:column}}
+    .evt-list{flex:1}
+    .evt{display:flex;gap:1rem;padding:1rem;border:1px solid var(--line);border-radius:var(--radius-sm);background:#fff}
+    .evt-date{
+      width:64px;min-width:64px;border-radius:12px;border:1px solid var(--line);text-align:center;background:var(--bg-soft);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;color:var(--brand)
+    }
+    .evt-date .m{font-size:.78rem;color:var(--muted);font-weight:700}
+    .evt a{font-weight:700}
+
+    /* ============ FAQ (Acordeón) ============ */
+    .faq .item{border:1px solid var(--line);border-radius:var(--radius-sm);background:#fff;overflow:hidden}
+    .faq .q{width:100%;text-align:left;padding:1rem 1.1rem;background:#fff;border:0;border-bottom:1px solid var(--line);font-weight:700}
+    .faq .a{padding:1rem 1.1rem;color:var(--muted);display:none}
+    .faq .item.open .a{display:block}
+
+    /* ============ Footer ============ */
+    footer.site-footer{
+      margin-top:clamp(18px,4vw,40px);
+      background:#fff;border-top:1px solid var(--line)
+    }
+    .footer-wrap{display:grid;gap:var(--space);grid-template-columns: 2fr 1fr 1fr; padding:clamp(18px,4vw,40px) 0}
+    @media (max-width:980px){.footer-wrap{grid-template-columns:1fr}}
+    .copyright{border-top:1px solid var(--line);padding:1rem 0;color:var(--muted);font-size:.95rem}
+
+    /* ============ Dark mode opcional (sigue automático) ============ */
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#0d1117;--bg-soft:#0f141c;--card:#0f141c;--text:#e6edf3;--muted:#9aa5b1;--line:#1f2630;
+        --shadow: none; --shadow-sm:none;
+      }
+      .btn--light{background:transparent;color:#e6edf3;border-color:var(--line)}
+      .icon{color:#e6edf3}
+    }
+  </style>
+</head>
+
+<body>
+  <!-- =================== HEADER =================== -->
+  <header class="site-header" role="banner">
+    <div class="container nav-wrap">
+      <div class="brand">
+        <!-- Reemplaza el src por tu logo (opcional) -->
+        <img class="brand__logo" src="LOGO_URL" alt="Logo" />
+        <div class="brand__title">Intranet corporativa</div>
+      </div>
+
+      <nav class="nav" role="navigation" aria-label="Principal">
+        <a href="#" class="is-active">Inicio</a>
+        <a href="#noticias">Actualidad</a>
+        <a href="#accesos">Accesos</a>
+        <a href="#areas">Áreas</a>
+        <a href="#eventos">Eventos</a>
+        <a href="#faq">Ayuda</a>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- Selector de idioma o enlace al portal público -->
+        <a class="icon-btn" href="#" title="ES" aria-label="Idioma ES">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18v12H3z"/><path fill="#c60b1e" d="M3 10h18v4H3z"/></svg>
+        </a>
+        <!-- Búsqueda (apunta a página de búsqueda de tu SP) -->
+        <a class="icon-btn" href="/_layouts/15/search.aspx" title="Buscar" aria-label="Buscar">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M10 18a8 8 0 1 1 5.3-14l.7-.7 1.4 1.4-.7.7A8 8 0 0 1 10 18zm0-2a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"/><path d="m21 21-4.35-4.35"/></svg>
+        </a>
+        <!-- Menú móvil -->
+        <button class="icon-btn menu-toggle" id="menuToggle" aria-label="Abrir menú">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Drawer móvil -->
+    <div class="drawer" id="drawer">
+      <a href="#" class="is-active">Inicio</a>
+      <a href="#noticias">Actualidad</a>
+      <a href="#accesos">Accesos</a>
+      <a href="#areas">Áreas</a>
+      <a href="#eventos">Eventos</a>
+      <a href="#faq">Ayuda</a>
+    </div>
+  </header>
+
+  <!-- =================== HERO =================== -->
+  <section class="hero">
+    <div class="container hero__wrap">
+      <div>
+        <div class="chip">🚀 Bienvenido</div>
+        <h1 class="hero__title">Tu intranet, todo en un solo lugar</h1>
+        <p class="hero__text">
+          Noticias internas, accesos a sistemas, políticas, eventos y más. Personaliza este portal con tus
+          contenidos y enlázalo desde SharePoint con el web part de inserción (<em>iframe</em>).
+        </p>
+        <div style="display:flex;gap:.6rem;margin-top:1rem">
+          <a class="btn" href="#accesos">Ir a accesos rápidos</a>
+          <a class="btn btn--light" href="#noticias">Ver noticias</a>
+        </div>
+      </div>
+
+      <!-- Imagen/Video del hero (opcional) -->
+      <div class="hero__img" role="img" aria-label="Imagen representativa"></div>
+    </div>
+  </section>
+
+  <main>
+    <!-- =================== ACCESOS RÁPIDOS =================== -->
+    <section id="accesos" class="container" style="padding:clamp(18px,4vw,40px) 0">
+      <h2 class="section-title">Accesos rápidos</h2>
+      <div class="grid grid-4 quick-links">
+        <article class="card ql-item">
+          <div class="ql-icon">🏢</div>
+          <div>
+            <div class="ql-title">RR. HH.</div>
+            <a href="#" target="_top">Portal de Talento</a>
+          </div>
+        </article>
+        <article class="card ql-item">
+          <div class="ql-icon">💻</div>
+          <div>
+            <div class="ql-title">Mesa de ayuda</div>
+            <a href="#" target="_top">Crear ticket</a>
+          </div>
+        </article>
+        <article class="card ql-item">
+          <div class="ql-icon">📄</div>
+          <div>
+            <div class="ql-title">Políticas y formatos</div>
+            <a href="#" target="_top">Repositorio</a>
+          </div>
+        </article>
+        <article class="card ql-item">
+          <div class="ql-icon">📊</div>
+          <div>
+            <div class="ql-title">Indicadores</div>
+            <a href="#" target="_top">Cuadros de mando</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- =================== NOTICIAS =================== -->
+    <section id="noticias" class="container" style="padding:clamp(8px,2vw,14px) 0">
+      <div style="display:flex;align-items:end;justify-content:space-between;gap:var(--space)">
+        <h2 class="section-title">Actualidad</h2>
+        <a class="btn btn--light" href="#" target="_top">Ver todo</a>
+      </div>
+
+      <div class="grid grid-3 news">
+        <!-- Tarjeta 1 -->
+        <article class="card">
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=60')"></div>
+          <div class="body">
+            <div class="meta">
+              <span>🗓️ 02 Feb</span> · <span>Comunicaciones</span>
+            </div>
+            <h3 style="margin:.2rem 0 .6rem 0">Lanzamos la nueva intranet</h3>
+            <p style="color:var(--muted)">Conoce las secciones, cómo aportar contenidos y las métricas que tendremos.</p>
+            <div style="margin-top:.8rem"><a class="btn btn--light" href="#" target="_top">Leer más</a></div>
+          </div>
+        </article>
+
+        <!-- Tarjeta 2 -->
+        <article class="card">
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1554774853-aae0a22c8aa4?auto=format&fit=crop&w=1200&q=60')"></div>
+          <div class="body">
+            <div class="meta">
+              <span>🗓️ 31 Ene</span> · <span>Talento</span>
+            </div>
+            <h3 style="margin:.2rem 0 .6rem 0">Convocatoria de formación</h3>
+            <p style="color:var(--muted)">Inscríbete a los cursos de bienestar, seguridad y liderazgo del Q1.</p>
+            <div style="margin-top:.8rem"><a class="btn btn--light" href="#" target="_top">Leer más</a></div>
+          </div>
+        </article>
+
+        <!-- Tarjeta 3 -->
+        <article class="card">
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=60')"></div>
+          <div class="body">
+            <div class="meta">
+              <span>🗓️ 28 Ene</span> · <span>IT</span>
+            </div>
+            <h3 style="margin:.2rem 0 .6rem 0">Mantenimiento programado</h3>
+            <p style="color:var(--muted)">Habrá ventanas de mantenimiento el sábado de 7–9 pm. Detalles en la nota.</p>
+            <div style="margin-top:.8rem"><a class="btn btn--light" href="#" target="_top">Leer más</a></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- =================== ÁREAS / DEPARTAMENTOS =================== -->
+    <section id="areas" class="container" style="padding:clamp(18px,4vw,40px) 0">
+      <h2 class="section-title">Áreas y unidades</h2>
+      <div class="grid grid-3 depts">
+        <article class="card dept">
+          <div class="badge">👥</div>
+          <div>
+            <div class="ql-title">Talento Humano</div>
+            <p style="color:var(--muted);margin:.2rem 0 .6rem 0">Vacantes, bienestar, nómina, formación.</p>
+            <a href="#" class="btn btn--light" target="_top">Ir al micrositio</a>
+          </div>
+        </article>
+        <article class="card dept">
+          <div class="badge">🖥️</div>
+          <div>
+            <div class="ql-title">Tecnología</div>
+            <p style="color:var(--muted);margin:.2rem 0 .6rem 0">Tickets, catálogos, catálogos de servicios, políticas.</p>
+            <a href="#" class="btn btn--light" target="_top">Ir al micrositio</a>
+          </div>
+        </article>
+        <article class="card dept">
+          <div class="badge">💼</div>
+          <div>
+            <div class="ql-title">Compras</div>
+            <p style="color:var(--muted);margin:.2rem 0 .6rem 0">Solicitudes, proveedores, órdenes y contratos.</p>
+            <a href="#" class="btn btn--light" target="_top">Ir al micrositio</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- =================== KPIs + EVENTOS =================== -->
+    <section id="eventos" class="container events" style="padding:clamp(8px,2vw,14px) 0">
+      <div class="row">
+        <div class="kpis" style="flex:1">
+          <h2 class="section-title">Indicadores</h2>
+          <div class="grid grid-3">
+            <div class="kpi">
+              <div class="label">Satisfacción TI</div>
+              <div class="val">92%</div>
+              <div class="delta">▲ +3 pp</div>
+            </div>
+            <div class="kpi">
+              <div class="label">Adopción Intranet</div>
+              <div class="val">1.8K</div>
+              <div class="delta">▲ +220</div>
+            </div>
+            <div class="kpi">
+              <div class="label">Tickets abiertos</div>
+              <div class="val">37</div>
+              <div class="delta" style="color:#d64545">▼ -5</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="evt-list">
+          <h2 class="section-title">Próximos eventos</h2>
+          <div class="grid">
+            <article class="evt">
+              <div class="evt-date"><div>12</div><div class="m">FEB</div></div>
+              <div>
+                <a href="#" target="_top">Jornada de seguridad vial</a>
+                <div style="color:var(--muted);font-size:.95rem;margin-top:.2rem">Auditorio principal · 9:00–10:30</div>
+              </div>
+            </article>
+            <article class="evt">
+              <div class="evt-date"><div>20</div><div class="m">FEB</div></div>
+              <div>
+                <a href="#" target="_top">Capacitación M365: SharePoint</a>
+                <div style="color:var(--muted);font-size:.95rem;margin-top:.2rem">Sala 3 · 14:00–16:00</div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== FAQ =================== -->
+    <section id="faq" class="container faq" style="padding:clamp(18px,4vw,40px) 0">
+      <h2 class="section-title">Preguntas frecuentes</h2>
+      <div class="grid">
+        <div class="item">
+          <button class="q">¿Cómo publico una noticia?</button>
+          <div class="a">Envía tu contenido al equipo de Comunicaciones o solicita permisos de autor en el micrositio.</div>
+        </div>
+        <div class="item">
+          <button class="q">¿Dónde encuentro políticas y formatos?</button>
+          <div class="a">Consulta el repositorio de “Políticas y formatos” en la sección de Accesos rápidos.</div>
+        </div>
+        <div class="item">
+          <button class="q">¿Cómo abro un ticket de soporte?</button>
+          <div class="a">Ingresa a la Mesa de ayuda desde Accesos rápidos y describe tu solicitud con evidencias.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =================== FOOTER =================== -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-wrap">
+      <div>
+        <div class="brand__title" style="margin-bottom:.4rem">Intranet corporativa</div>
+        <p style="color:var(--muted);max-width:56ch">Este portal centraliza comunicación interna, recursos, trámites y herramientas para mejorar la productividad.</p>
+      </div>
+      <div>
+        <div class="ql-title" style="margin-bottom:.6rem">Contacto</div>
+        <div style="color:var(--muted);font-size:.95rem;display:grid;gap:.3rem">
+          <span>📧 comunicaciones@tuempresa.com</span>
+          <span>📞 Ext. 1234</span>
+          <span>🏢 Sede principal · Bogotá</span>
+        </div>
+      </div>
+      <div>
+        <div class="ql-title" style="margin-bottom:.6rem">Enlaces</div>
+        <div style="display:grid;gap:.3rem">
+          <a href="#" target="_top">Políticas</a>
+          <a href="#" target="_top">Directorio</a>
+          <a href="#" target="_top">Canal de denuncias</a>
+        </div>
+      </div>
+    </div>
+    <div class="container copyright">© <span id="y"></span> Tu Empresa · Todos los derechos reservados</div>
+  </footer>
+
+  <script>
+    // ===== Toggle del menú móvil =====
+    const btn = document.getElementById('menuToggle');
+    const drawer = document.getElementById('drawer');
+    if(btn && drawer){
+      btn.addEventListener('click', ()=> drawer.classList.toggle('open'));
+    }
+
+    // ===== Acordeón FAQ =====
+    document.querySelectorAll('.faq .item .q').forEach(q=>{
+      q.addEventListener('click', ()=>{
+        const item = q.closest('.item');
+        item.classList.toggle('open');
+      });
+    });
+
+    // ===== Año dinámico en el footer =====
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
